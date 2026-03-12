@@ -37,4 +37,12 @@ ii) State (Dynamic Data -> Changable Data -> User Integrations)
 'argument' gula ka 'attribute' ear moto kora pas korce
 ---
 
+# Day2. Callback Function, Turnary operators
+## 01. Handler function
+- Increase Handler, Decrease Handler
+## 02. You can give 2 things as arguments.
+- Direct Value
+- Expration -> that convart a value
 
+## 03. Create a project increase & decrease handler
+---
