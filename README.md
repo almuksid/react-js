@@ -8,6 +8,10 @@
 7. Parameter মানে function এর ভেতরে data নেওয়ার variable. function add(a,b){} a, b এগুলো parameter
 8. Argument মানে হচ্ছে — যখন তুমি কোনো function কল করো, তখন ব্র্যাকেট () এর ভিতরে যা পাঠাও, সেটা argument।
 9. Sibling কী? Sibling মানে হলো একই parent এর child element গুলো। অর্থাৎ, যদি দুইটা element এর parent একই হয়, তাহলে তারা sibling।
+10. State -> Changable Data
+11. Event Listener 
+12. Mutative/ NotMutative
+13. Elements 
 
 - Components has 2 lears
 1. Presentation Lear
@@ -37,7 +41,7 @@ ii) State (Dynamic Data -> Changable Data -> User Integrations)
 'argument' gula ka 'attribute' ear moto kora pas korce
 ---
 
-# Day2. Callback Function, Turnary operators
+# Day2. State, State Machanizm Rendering Rerendering, Callback Function, Turnary operators
 ## 01. Handler function
 - Increase Handler, Decrease Handler
 ## 02. You can give 2 things as arguments.
@@ -46,3 +50,78 @@ ii) State (Dynamic Data -> Changable Data -> User Integrations)
 
 ## 03. Create a project increase & decrease handler
 ---
+
+# Day3. Create a project use state -> Inmemory cut
+- State -
+🔥 Complete JavaScript Loop List
+Basic: 
+for, while, do while
+
+Object / Iterable:
+for...of, for...in
+
+Array Iteration: 
+- forEach(), map(), filter(), reduce(), some(), every(), find(), 
+
+- String method  *include()* সরাসরি বুলিয়ান রিটার্ন করে
+
+
+<!-- Todo Apps.jsx -->
+```rafc
+
+import React from 'react'
+import { useState } from 'react'
+const TodoApp = () => {
+  const [todoTitle, setTodoTitle] = useState("")
+  const [todoList, setTodoList] = useState([
+    {id:1, title:"todo1", isCompleted:true},
+    {id:2, title:"todo2", isCompleted:false},
+  ])
+  const submitHandler = (event) => {
+    event.preventDefault()
+    if (!todoTitle.trim()) return alert(`Submit Valid Text`)
+    const newTodo = {
+      id : Date.now() + "",
+      title: todoTitle,
+      isCompleted:false 
+    }
+    setTodoList([...todoList, newTodo])
+  } 
+
+  const removeHandler = (todoId) => {
+    const removeTodo = todoList.filter(todo => todo.id !== todoId)
+    setTodoList(removeTodo)
+  }
+
+  const checkedHandler = (todoId) => {
+    const newTodo = todoList.map(todo => {
+      if (todo.id === todoId){
+        return ({...todo, isCompleted: !todo.isCompleted})
+      }
+      return {...todo}
+    })
+    setTodoList(newTodo)
+  }
+  return (
+    <div>
+      <h2>Todo App</h2>
+
+      <form action="" onSubmit={submitHandler}>
+        <input type="text" value={todoTitle} onChange={event => setTodoTitle(event.target.value)} />
+        <button type="submit">Create Todo</button>
+      </form>
+
+      <ul>
+        {todoList.map(todo => <li key={todo.id}>
+          <input type="checkbox"  checked={todo.isCompleted} onChange={ () => checkedHandler(todo.id)}/>
+          <span>{todo.title}</span>
+          <button type="submit" onClick={() => removeHandler(todo.id)}>Remove Todo</button>
+        </li>)}
+      </ul>
+    </div>
+  )
+}
+
+export default TodoApp
+
+```
