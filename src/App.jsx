@@ -6,6 +6,7 @@ import Biodata from './components/day1/Biodata'
 import Counter from './components/day2/Counter'
 import TodoApp from './components/day3/TodoApp'
 import FilterMap from './components/day0/FilterMap'
+import NewTodoList from './components/day4/NewTodoList'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,8 +17,9 @@ function App() {
       {/* <Biodata name='Al Muksid' age={25} occupation='Software Engineer' address='Magura' skills={['JavaScript', 'React', 'Node.js']} interests={['Coding', 'Reading', 'Traveling']} />
       <Biodata name='Mesion Sheikh' age={23} occupation='Software Engineer' skills={['JavaScript', 'React', 'Node.js']} interests={['Coding', 'Reading', 'Traveling']} /> */}
       {/* <Counter/> */}
-      <TodoApp/>
+      {/* <TodoApp/> */}
       {/* <FilterMap/> */}
+      <NewTodoList/>
     </div>
     </>
   )
