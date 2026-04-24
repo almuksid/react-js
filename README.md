@@ -120,6 +120,7 @@ React state update করার সময় always non-mutative use করতে �
 14. Derived State এমন একটি মান যা অন্য কোনো state বা props থেকে হিসাব করে বের করা হয়, আলাদা করে state হিসেবে রাখা হয় না।
 15. Call Back Function 
 16. Reverse Engineering Code vanga vanga lekha
+17. State Lifting Mekanism -> 1 way dataflow
 state lifting mrkanisim
 - Components has 2 lears
 1. Presentation Lear
@@ -338,5 +339,206 @@ const NewTodoList = () => {
 
 export default NewTodoList
 
+
+```
+# Day5 State Lifting & Props Drilling (One way data flow)
+## 1. MyTodoApp.jsx
+```jsx
+import {useState} from 'react'
+import TodoForm from './TodoForm'
+import TodoListSection from './TodoListSection'
+
+const MyTodoApp = () => {
+  const [todoTitle, setTodoTitle] = useState("")
+  const [todoList, setTodoList] = useState([
+      {id:1, title:"todo1", isCompleted:true},
+      {id:2, title:"todo2", isCompleted:false},
+      {id:3, title:"todo3", isCompleted:true}
+  ])
+
+    const [search, setSearch] = useState("")
+
+    const [editMode, setEditMode] = useState(false)
+    const [editableTodo, setEditableTodo] = useState(null)
+    
+    const updateTitleHandler = () => {
+      const newTodo = todoList.map(todo => {
+        if (todo.id === editableTodo.id){
+          return {...todo, title: todoTitle}
+        }
+        return {...todo}
+      })
+      setTodoList(newTodo)
+      setEditMode(false)
+      setTodoTitle("")
+    }
+
+  return (
+    <div> 
+      <div className="mb-4 bgCol ">
+        <h2 style={{color:'white', textAlign:'center', marginBottom:'30px'}}>My Todo App</h2>
+        <TodoForm updateTitleHandler={updateTitleHandler} editableTodo={editableTodo} setEditableTodo={setEditableTodo} editMode={editMode} setEditMode={setEditMode} search={search} setSearch={setSearch} todoTitle={todoTitle} setTodoTitle={setTodoTitle} todoList={todoList} setTodoList={setTodoList} />
+        <TodoListSection  editableTodo={editableTodo} setEditableTodo={setEditableTodo} editMode={editMode} setEditMode={setEditMode} todoList={todoList} setTodoList={setTodoList} search={search} setSearch={setSearch} setTodoTitle={setTodoTitle}/>
+      </div>
+    </div>
+  )
+}
+
+export default MyTodoApp
+```
+## 02 TodoForm.jsx
+```jsx
+import React from 'react'
+import TodoList from './TodoList'
+
+const TodoForm = (props) => {
+  const submitHandler = (event) => {
+    event.preventDefault()
+    if (props.todoTitle.trim() === "") return alert("Enter Correct Value")
+    props.editMode === true ? props.updateTitleHandler() : createTodo()
+  }   
+  const createTodo = () => {
+    const newTodo = ({
+      id: Date.now() + "",
+      title: props.todoTitle,
+      isCompleted:false
+    })
+    props.setTodoList([...props.todoList, newTodo])
+  }
+  // const submitHandler = (event) => {
+  //   event.preventDefault()
+  //   if (props.todoTitle.trim() === "") return alert("Enter Correct Value")
+    // const newTodo = {
+    //   id: Date.now() + "",
+    //   title: props.todoTitle,
+    //   isCompleted: false
+    // }
+    // props.setTodoList([...props.todoList, newTodo])
+  // }
+   
+  // const createTodo = () => {
+  //   const newTodo = ({
+  //     id: Date.now() + "",
+  //     title: todoTitle,
+  //     isCompleted:false
+  //   })
+  //   props.setTodoList([...props.todoList, newTodo])
+  // }
+  return (
+    <div>
+      <form  onSubmit={submitHandler} action="" className="input-group mb-3">
+        <input className="form-control " type="text" value={props.todoTitle} onChange={event => props.setTodoTitle(event.target.value)}/>
+        <button type="submit" className="btn btn-success">{props.editMode? "update Todo": "Create Todo"}</button>
+      </form> 
+      <form className="input-group mb-3">
+        <input className="form-control" type="search" value={props.search} onChange={(e) => props.setSearch(e.target.value)}/>
+        <button style={{float:'right'}} className="btn btn-success"  type='button'>Search Todo</button>
+      </form>
+    </div>
+  )
+}
+
+export default TodoForm
+```
+## 03. TodoListSection.jsx
+```jsx
+import React, {useState} from 'react'
+import TodoList from './TodoList'
+import TodoFilter from './TodoFilter'
+
+const TodoListSection = (props) => {
+  const [filter, setFilter] = useState("all")
+ 
+  const filterHandler = props.todoList
+  .filter(todo => {
+    if (filter === "all") return true
+    if (filter === "active") return !todo.isCompleted
+    if (filter === "completed") return todo.isCompleted
+  })
+  .filter(todo => todo.title.toLocaleLowerCase().includes(props.search.toLocaleLowerCase()))
+
+  // .filter((todo) => todo.title.toLowercase().include(props.search.toLowerCase()))
+
+  return (
+    <div>
+      <TodoFilter {...props} filter={filter} setFilter={setFilter}  />
+      <TodoList {...props} filter={filter} setFilter={setFilter} filterHandler={filterHandler}/>
+      
+      {/* TodoList, TodoFilter */}
+    </div>
+  )
+}
+
+export default TodoListSection
+```
+
+## 04. TodoFilter.jsx
+```jsx
+import React from 'react'
+
+const TodoFilter = (props) => {
+  
+  return (
+    <div>
+      <button class="btn btn-success filterBtn" type="submit" onClick={() => props.setFilter("all")}>All</button>
+      <button class="btn btn-success filterBtn" type="submit" onClick={() => props.setFilter("active")}>Active</button>
+      <button class="btn btn-success filterBtn" type="submit" onClick={() => props.setFilter("completed")}>Completed</button><br /><br />
+
+    </div>
+  )
+}
+
+export default TodoFilter
+```
+
+## 5. TodoList.jsx
+```jsx
+import React from 'react'
+
+const TodoList = (props) => {
+  
+  const editHandler = (todo) => {
+		props.setEditMode(true);
+		props.setEditableTodo(todo);
+		props.setTodoTitle(todo.title);
+	};
+
+  const removeHandler = (todoId) => {
+    const newRemTodo = props.todoList.filter(todo => todo.id !== todoId)
+    props.setTodoList(newRemTodo)
+  }
+  
+  const checkedHandler = (todoId) => {
+    const newTodo = props.todoList.map(todo => {
+      if (todo.id === todoId){
+        return {...todo, isCompleted: !todo.isCompleted}
+      }
+      return {...todo}
+    })
+    props.setTodoList(newTodo)
+  }
+  // const removeHandler = (todoId) => {
+  //   const newRemTodo = props.todoList.filter(todo => todo.id !== todoId)
+  //   props.setTodoList(newRemTodo)
+  // }
+  return (
+    <div>
+      <ul class="list-group">
+
+        {props.filterHandler
+          .map(todo => <li class="list-group-item" key={todo.id} >
+            <input type="checkbox" checked={todo.isCompleted} onClick={() => checkedHandler(todo.id)}/>
+            <span>{todo.title}</span>
+            {/* <button type="button" onClick={() => removeHandler(todo.id)}>Remove Todo</button> */}
+            <button type="button"  onClick={() => removeHandler(todo.id)} style={{float:'right', marginRight:'10px'}}   class="btn btn-danger" > Remove </button>
+            <button style={{float:'right', marginRight:'10px'}} class="btn btn-warning"  type="submit" onClick={() => editHandler(todo)}>Edit</button>
+          </li>)
+        }
+      </ul>
+    </div>
+  )
+}
+
+export default TodoList
 
 ```

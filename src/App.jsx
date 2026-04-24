@@ -7,7 +7,8 @@ import Counter from './components/day2/Counter'
 import TodoApp from './components/day3/TodoApp'
 import FilterMap from './components/day0/FilterMap'
 import NewTodoList from './components/day4/NewTodoList'
-import Todo from './components/day5/Todo'
+// import Todo from './components/day5/Todo'
+import MyTodoApp from './components/day5/MyTodoApp'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -20,8 +21,8 @@ function App() {
       {/* <Counter/> */}
       {/* <TodoApp/> */}
       {/* <FilterMap/> */}
-      <NewTodoList/>
-      {/* <Todo/> */}
+      {/* <NewTodoList/> */}
+      <MyTodoApp/>
     </div>
     </>
   )

@@ -2,16 +2,18 @@ import React from 'react'
 import { useState } from 'react'
 
 const NewTodoList = () => {
-  const [editMode, setEditMode] = useState(false)
-  const [editableTodo, setEditableTodo] = useState(null)
-  const [search, setSearch] = useState("")
-  const [filter, setFilter] = useState("all")
   const [todoTitle, setTodoTitle] = useState("")
   const [todoList, setTodoList] = useState([
     {id:1, title:"todo1", isCompleted:true},
     {id:2, title:"todo2", isCompleted:false},
     {id:3, title:"todo3", isCompleted:true},
   ])
+
+  const [search, setSearch] = useState("")
+  const [filter, setFilter] = useState("all")
+  
+  const [editMode, setEditMode] = useState(false)
+  const [editableTodo, setEditableTodo] = useState(null)
 
   const submitHandler = (event) => {
     event.preventDefault()
@@ -79,7 +81,7 @@ const NewTodoList = () => {
       </form>
       <form class="input-group mb-3">
         <input class="form-control" type="search" onChange={(e) => setSearch(e.target.value)}/>
-        <button style={{float:'right'}} class="btn btn-success"  type={search}>Search Todo</button>
+        <button style={{float:'right'}} class="btn btn-success"  type="button">Search Todo</button>
       </form>
       <ul class="list-group">
         {filterHandler
