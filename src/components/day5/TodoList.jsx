@@ -8,17 +8,7 @@ const TodoList = (props) => {
 		props.setTodoTitle(todo.title);
 	};
 
-  const updateTitleHandler = () => {
-    const newTodo = props.todoList.map(todo => {
-      if (todo.id === props.editableTodo.id){
-        return {...todo, title: props.todoTitle}
-      }
-      return {...todo}
-    })
-    props.setTodoList(newTodo)
-    props.setEditMode(false)
-    props.setTodoTitle("")
-  }
+  
 
   const removeHandler = (todoId) => {
     const newRemTodo = props.todoList.filter(todo => todo.id !== todoId)

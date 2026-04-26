@@ -1,5 +1,11 @@
 # Day1. Components, Reusable components, Ui Section, Props, Argument, Parameter, Attribute, Event Handleing, State Managements, sibling
 1. React-এ Component হলো UI এর ছোট ছোট অংশ।
+```jsx
+- Component Example
+const newTodo = () => {
+
+}
+```
 2. UI মানে User Interface। একটা ওয়েবসাইটে অনেক Section থাকে। Hero section, Product section, Contact section, Footer section, React এ প্রতিটা section আলাদা component করা হয়।
 3. Props মানে data পাঠানো parent component থেকে child component এ।
 4. React-এ attribute হলো JSX-এর মধ্যে props পাঠানোর মাধ্যম। HTML-এর মতো দেখায়, কিন্তু সত্যি বলতে এগুলো props নামের object তৈরির উপাদান।
@@ -540,5 +546,274 @@ const TodoList = (props) => {
 }
 
 export default TodoList
+
+```
+
+# day6. Todo Context API Implementation
+## 1. Contexts/day6/TodoApp6Context.jsx 
+```jsx
+import { createContext, useState } from "react"
+
+export const TodoContext = createContext()
+
+const TodoProvider = ({children}) => {
+    const [todoTitle, setTodoTitle] = useState("")
+    const [todoList, setTodoList] = useState([
+        { id: 1, title: "todo1", isCompleted: true },
+        { id: 2, title: "todo2", isCompleted: false },
+        { id: 3, title: "todo3", isCompleted: true },
+    ])
+    const [search, setSearch] = useState("")
+    const [filter, setFilter] = useState("all")
+
+    const [editMode, setEditMode] = useState(false)
+    const [editableTodo, setEditableTodo] = useState(null)
+
+    const submitHandler = (event) => {
+        event.preventDefault()
+        if (!todoTitle.trim()) return
+        editMode ? updateTitleHandler() : createTodo()
+    }
+
+    const createTodo = () => {
+        const newTodo = {
+            id: Date.now() + "",
+            title: todoTitle,
+            isCompleted: false,
+        }
+        setTodoList([...todoList, newTodo])
+        setTodoTitle("")
+    }
+
+    const removeHandler = (todoId) => {
+        setTodoList(todoList.filter(todo => todo.id !== todoId))
+    }
+
+    const checkBoxHandler = (todoId) => {
+        setTodoList(
+            todoList.map(todo =>
+                todo.id === todoId ? { ...todo, isCompleted: !todo.isCompleted } : todo
+            )
+        )
+    }
+
+    const todoFilter = todoList
+        .filter(todo => {
+            if (filter === "all") return true
+            if (filter === "active") return !todo.isCompleted
+            if (filter === "completed") return todo.isCompleted
+            return true
+        })
+        .filter(todo => todo.title.toLowerCase().includes(search.toLowerCase()))
+
+    const editHandler = (todo) => {
+        setEditMode(true)
+        setEditableTodo(todo)
+        setTodoTitle(todo.title)
+    }
+
+    const updateTitleHandler = () => {
+        setTodoList(
+            todoList.map(todo =>
+                todo.id === editableTodo.id ? { ...todo, title: todoTitle } : todo
+            )
+        )
+        setEditMode(false)
+        setTodoTitle("")
+    }
+    const contextValue = {
+        todoTitle,
+        setTodoTitle,
+        todoList,
+        setTodoList, 
+        search,
+        setSearch,
+        filter,
+        setFilter,
+        editMode,
+        setEditMode, 
+        editableTodo,
+        setEditableTodo,
+        submitHandler,
+        createTodo,
+        removeHandler,
+        checkBoxHandler,
+        todoFilter,
+        editHandler,
+        updateTitleHandler,
+    }
+  return (
+    <TodoContext.Provider value={contextValue}>
+        {children}
+    </TodoContext.Provider> 
+  )
+}
+
+export default TodoProvider
+
+```
+## 2.TodoApp6.jsx 
+```jsx
+import React from 'react'
+import TodoForm6 from './TodoForm6'
+import TodoListSection6 from './TodoListSection6'
+
+import { useContext } from 'react'
+import { TodoContext } from '../../contexts/day6/TodoApp6Context'
+
+const TodoApp6 = () => {
+
+    const {todoTitle, setTodoTitle, todoList, setTodoList,  search, setSearch, filter, setFilter, editMode, setEditMode, editableTodo, setEditableTodo,} = useContext(TodoContext)
+
+    return (
+        <div className="row justify-content-center">
+            <div className="col-12 col-sm-10 col-md-8 col-lg-7 mx-auto px-1">
+                <div className="card shadow-sm border-0">
+                    <div className="card-header bg-primary text-white text-center">
+                        <h2 className="card-title mb-0">Todo App Day 6</h2>
+                    </div>
+                    <div className="card-body d-flex flex-column align-items-center gap-3">
+                        <TodoForm6/>
+                        <TodoListSection6/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default TodoApp6
+
+```
+## 3. TodoFilter6.jsx
+```jsx
+import React from 'react'
+import { useContext } from 'react'
+import { TodoContext } from '../../contexts/day6/TodoApp6Context'
+
+const TodoFilter6 = () => {
+    const {filter, setFilter, search, setSearch} = useContext(TodoContext)
+  return (
+    <div className="d-flex flex-column align-items-center gap-3 w-100 mb-3">
+        <div className="d-flex justify-content-center flex-wrap gap-2 w-100">
+            <button type="button" className={`btn btn-outline-primary ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter("all")}>All</button>
+            <button type="button" className={`btn btn-outline-primary ${filter === 'active' ? 'active' : ''}`} onClick={() => setFilter("active")}>Active</button>
+            <button type="button" className={`btn btn-outline-primary ${filter === 'completed' ? 'active' : ''}`} onClick={() => setFilter("completed")}>Completed</button>
+        </div>
+        <div className="input-group w-100" style={{ maxWidth: '500px' }}>
+            <span className="input-group-text">Search</span>
+            <input
+                type="search"
+                className="form-control"
+                placeholder="Search todos"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+        </div>
+    </div>
+  )
+}
+
+export default TodoFilter6
+
+```
+## 4. TodoForm6.jsx
+```jsx
+import React from 'react'
+import { useContext } from 'react'
+import { TodoContext } from '../../contexts/day6/TodoApp6Context'
+
+const TodoForm6 = () => {
+    const {submitHandler, todoTitle, setTodoTitle, editMode} = useContext(TodoContext)
+  return (
+    <form onSubmit={submitHandler} className="d-flex gap-2">
+        <input
+            type="text"
+            className="form-control flex-grow-1"
+            placeholder="Enter todo title"
+            value={todoTitle}
+            onChange={(e) => setTodoTitle(e.target.value)}
+        />
+        <button type="submit" className="btn btn-outline-primary">
+            {editMode ? "Update Todo" : "Create Todo"}
+        </button>
+    </form>
+  )
+}
+
+export default TodoForm6
+
+```
+## 5. TodoList6.jsx
+```jsx
+import React from 'react'
+import { useContext } from 'react'
+import { TodoContext } from '../../contexts/day6/TodoApp6Context'
+
+const TodoList6 = () => {
+    const {todoFilter, todoList, checkBoxHandler, editHandler, removeHandler} = useContext(TodoContext)
+  return (
+    <div className="border rounded p-3 bg-light w-100">
+        <div className="d-flex flex-column flex-sm-row justify-content-center align-items-center mb-3 gap-2">
+            <span className="fw-semibold">Showing {todoFilter.length} todo{todoFilter.length === 1 ? '' : 's'}</span>
+            <span className="badge bg-secondary">Total {todoList.length}</span>
+        </div>
+        <ul className="list-group w-100">
+            {todoFilter.length > 0 ? (
+                todoFilter.map(todo => (
+                    <li key={todo.id} className="list-group-item d-flex justify-content-between align-items-center gap-3 flex-nowrap">
+                        <div className="form-check d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={todo.isCompleted}
+                                onChange={() => checkBoxHandler(todo.id)}
+                                id={`todo-${todo.id}`}
+                            />
+                            <label
+                                className={`form-check-label text-truncate ${todo.isCompleted ? 'text-decoration-line-through text-muted' : ''}`}
+                                htmlFor={`todo-${todo.id}`}
+                                title={todo.title}
+                            >
+                                {todo.title}
+                            </label>
+                        </div>
+                        <div className="d-flex gap-2">
+                            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => editHandler(todo)}>
+                                Edit
+                            </button>
+                            <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => removeHandler(todo.id)}>
+                                Remove
+                            </button>
+                        </div>
+                    </li>
+                ))
+            ) : (
+                <li className="list-group-item text-center text-muted">No todos found.</li>
+            )}
+        </ul>
+    </div>
+  )
+}
+
+export default TodoList6
+
+```
+## 6. TodoListSection6.jsx
+```jsx
+import React from 'react'
+import TodoList6 from './TodoList6'
+import TodoFilter6 from './TodoFilter6'
+
+const TodoListSection6 = (props) => {
+  return (
+    <div className="d-flex flex-column gap-3 w-100 align-items-center">
+      <TodoFilter6 {...props} />
+      <TodoList6 {...props} />
+    </div>
+  )
+}
+
+export default TodoListSection6
 
 ```
