@@ -11,6 +11,7 @@ import NewTodoList from './components/day4/NewTodoList'
 import MyTodoApp from './components/day5/MyTodoApp'
 import TodoApp6 from './components/day6/TodoApp6'
 import TodoProvider from './contexts/day6/TodoApp6Context'
+import ReducerHooks from './components/day7/ReducerHooks'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,9 +19,10 @@ function App() {
   return (
     <>
       <div className="container-fluid p-0 min-vh-100 bg-light">
-        <TodoProvider>
-          <TodoApp6 /> {/* Day 6 */}
-        </TodoProvider>
+        {/* <TodoProvider>
+          <TodoApp6 /> Day 6
+        </TodoProvider> */}
+        <ReducerHooks/>
       </div>
     </>
   )

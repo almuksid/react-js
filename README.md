@@ -134,6 +134,12 @@ state lifting mrkanisim
 i) Props (Another components will pass me the data as arguments)
 ii) State (Dynamic Data -> Changable Data -> User Integrations)
 
+18. Convention
+19. 
+
+
+
+
 - React শেখার সঠিক order:
 
 1️⃣ JavaScript ES6
@@ -549,7 +555,7 @@ export default TodoList
 
 ```
 
-# day6. Todo Context API Implementation
+# Day6. Todo Context API Implementation
 ## 1. Contexts/day6/TodoApp6Context.jsx 
 ```jsx
 import { createContext, useState } from "react"
@@ -815,5 +821,64 @@ const TodoListSection6 = (props) => {
 }
 
 export default TodoListSection6
+
+```
+
+# Day7. Reduce Method
+
+## 1. Javascripts reduce() method
+```jsx
+
+- Sum of Array (Without Initial Value)
+const nmbr = [1, 2, 3, 4]
+const addition =  nmbr.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue
+});
+console.log("1st");
+console.log(addition);
+
+- Find Maximum Number (Largest Value)
+const num = [7, 8, 9]
+const result = num.reduce((accumulator, currentvalue) => {
+    return accumulator > currentvalue ? accumulator :currentvalue
+}, 0)
+console.log("2nd")
+console.log(result)
+
+- Count Frequency (How many times each value appears)
+const arr = ["a", "b", "c", "b", "a", "a"]
+const result1 = arr.reduce((accumulator, currentValue) => {
+    accumulator[currentValue] = (accumulator[currentValue] || 0) + 1
+    return accumulator
+}, {})
+console.log("3rd")
+console.log(result1)
+
+
+- Flatten Array (Nested array → Single array)
+const arr3 = [[1, 2], [3, 4], [5]]
+const result3 = arr3.reduce((accumulator, currentValue) => {
+    return accumulator.concat(currentValue)
+}, [])
+console.log("4th")
+console.log(result3)
+
+- Group By Property (Group users by age)
+const users = ([
+    {name: "a", age: 20},
+    {name: "b", age: 25},
+    {name: "c", age: 20},
+])
+
+const grouped = users.reduce((accumulator, user) => {
+    const key = user.age
+    if(!accumulator[key]){
+        accumulator[key] = []
+    }
+    accumulator[key].push(user)
+    return accumulator
+}, {})
+console.log("5th")
+console.log(grouped)
 
 ```
