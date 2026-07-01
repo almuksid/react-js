@@ -941,3 +941,53 @@ const ReducerHooks = () => {
 export default ReducerHooks
 
 ```
+
+# Day8. 
+
+১. useReducer হলো React-এর একটা hook, যা state management-এর জন্য ব্যবহার হয়।
+২. reducer function (যেমন ourReducer) state আর action নেয়, আর action অনুযায়ী state আপডেট করে।
+৩. useReducer(ourReducer, 10)-এ, প্রথম argument হলো তোমার reducer function, আর দ্বিতীয় argument হলো initial state, এখানে ১০।
+৪. useReducer তোমাকে দুটি জিনিস দেয়: state (অর্থাৎ counter) এবং dispatch function, যেটা তুমি action পাঠাতে ব্যবহার করো।
+
+৫. Action (যেমন "Increase_by_1") dispatch করলে, তোমার reducer function সেই action অনুযায়ী state পরিবর্তন করে, আর component তা রি-রেন্ডার হয়।
+
+# 001. Adding Local Storage in React
+```jsx
+
+import { useState } from 'react'
+import Form from './Form'
+import ListDisplay from './ListDisplay'
+import ResetList from './ResetList'
+// const todoKey = "todoListDisplay"
+
+const Todo = () => {
+
+    const [todoTitle, setTodoTitle] = useState("")
+    const [todoList, setTodoList] = useState(() => {
+        const data = localStorage.getItem("todos");
+
+        if (!data) {
+            return [];
+        }
+
+        return JSON.parse(data);
+    });
+
+    localStorage.setItem("todos", JSON.stringify(todoList))
+
+    return (
+        <div className="max-w-md mx-auto mt-10">
+
+            <Form todoTitle={todoTitle} setTodoTitle={setTodoTitle} todoList={todoList} setTodoList={setTodoList} />
+
+            <ListDisplay todoList={todoList} setTodoList={setTodoList} />
+
+            <ResetList setTodoList={setTodoList} />
+
+        </div>
+    )
+}
+
+export default Todo
+
+```
