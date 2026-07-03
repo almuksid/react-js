@@ -1,4 +1,5 @@
 import React, { act } from 'react'
+import { useReducer } from 'react'
 
 const ReduceHooks8 = () => {
   const [counter, despatch] = useReducer(ourReducer, 10)
