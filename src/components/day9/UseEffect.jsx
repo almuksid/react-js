@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import Title from './Title';
 
 const UseEffect = () => {
     const [dateTime, setDateTime] = useState("");
@@ -28,10 +29,13 @@ const UseEffect = () => {
 
     //     }, [])
     return (
-        <div style={{ textAlign: 'center' }}>
-            <h2>useEffect</h2>
-            <p>{dateTime}</p>
-        </div>
+        <>
+            <div style={{ textAlign: 'center' }}>
+                <h2>useEffect</h2>
+                <p>{dateTime}</p>
+            </div>
+            <Title />
+        </>
     )
 }
 
