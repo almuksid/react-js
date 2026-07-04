@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
 import Biodata from './components/day1/Biodata'
 import Counter from './components/day2/Counter'
@@ -16,6 +16,7 @@ import ReduceHooks8 from './components/day8/ReduceHooks8'
 import TodoApp3 from './components/day3/TodoApp'
 import NewTodoList4 from './components/day4/NewTodoList4'
 import ReactTest from './components/day8/ReactTest'
+import UseEffect from './components/day9/UseEffect'
 
 
 function App() {
@@ -32,7 +33,8 @@ function App() {
         </TodoProvider> */}
         {/* <ReducerHooks/> */}
         {/* <ReduceHooks8/> */}
-        <ReactTest/>
+        {/* <ReactTest/> */}
+        <UseEffect/>
       </div>
     </>
   )

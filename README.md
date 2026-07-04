@@ -993,3 +993,51 @@ export default Todo
 ```
 
 # Day 9 useEffect Hooks and its use case
+- Syntax
+```jsx
+import { useEffect } from "react";
+
+useEffect(() => {
+    // Code runs here
+}, [dependencies]);
+```
+## 01. set real time using useEffect
+```jsx
+import React from 'react'
+import { useState, useEffect } from 'react'
+
+const UseEffect = () => {
+    const [dateTime, setDateTime] = useState(0)
+    useEffect(() => {
+        setInterval(() => {
+            const updatedDate = new Date()
+            setDateTime(updatedDate.toLocaleTimeString())
+        }, 1000)
+
+    }, [])
+    return (
+        <div style={{ textAlign: 'center' }}>
+            <h2>useEffect</h2>
+            <p>{dateTime}</p>
+        </div>
+    )
+}
+
+export default UseEffect
+
+```
+Another Method
+```jsx
+useEffect(() => {
+        const updateTime = () => {
+            setDateTime(new Date().toLocaleTimeString());
+        };
+
+        updateTime(); // প্রথমবার সঙ্গে সঙ্গে Time দেখাবে
+
+        const interval = setInterval(updateTime, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+```
