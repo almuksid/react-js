@@ -17,6 +17,7 @@ import TodoApp3 from './components/day3/TodoApp'
 import NewTodoList4 from './components/day4/NewTodoList4'
 import ReactTest from './components/day8/ReactTest'
 import UseEffect from './components/day9/UseEffect'
+import FetchApi from './components/day9_fetchApi/FetchApi'
 
 
 function App() {
@@ -34,7 +35,9 @@ function App() {
         {/* <ReducerHooks/> */}
         {/* <ReduceHooks8/> */}
         {/* <ReactTest/> */}
-        <UseEffect/>
+        {/* <UseEffect/> */}
+        <FetchApi/>
+
       </div>
     </>
   )
