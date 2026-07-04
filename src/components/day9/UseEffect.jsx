@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Title from './Title';
+import CleanUp from './CleanUp';
 
 const UseEffect = () => {
     const [dateTime, setDateTime] = useState("");
@@ -33,8 +34,10 @@ const UseEffect = () => {
             <div style={{ textAlign: 'center' }}>
                 <h2>useEffect</h2>
                 <p>{dateTime}</p>
+
+                {/* <Title /> */}
+                <CleanUp />
             </div>
-            <Title />
         </>
     )
 }
