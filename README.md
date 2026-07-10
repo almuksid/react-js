@@ -1119,7 +1119,7 @@ Another Method
   }, [count])
 ```
 
-# Day 9.1 Fetch API with Project
+# Day 9.1 Fetch API with Project - FetchApi, useEffect, Async & Await, Try & Catch with useState, loading, error, search filter etc.
 ```jsx
 import React, { useEffect, useState } from 'react'
 
