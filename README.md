@@ -160,6 +160,7 @@ ii) State (Dynamic Data -> Changable Data -> User Integrations)
 {props.address && <p>Address : {props.address}</p>}
 ```
 'argument' gula ka 'attribute' ear moto kora pas korce
+
 ---
 
 # Day2. State, State Machanizm Rendering Rerendering, Callback Function, Turnary operators
@@ -170,6 +171,7 @@ ii) State (Dynamic Data -> Changable Data -> User Integrations)
 - Expration -> that convart a value
 
 ## 03. Create a project increase & decrease handler
+
 ---
 
 # Day3. Create a project use state -> Inmemory cut
@@ -246,6 +248,8 @@ const TodoApp = () => {
 export default TodoApp
 
 ```
+
+---
 
 # Day4.  Search Filter
 ```jsximport React from 'react'
@@ -353,6 +357,9 @@ export default NewTodoList
 
 
 ```
+
+---
+
 # Day5 State Lifting & Props Drilling (One way data flow)
 ## 1. MyTodoApp.jsx
 ```jsx
@@ -554,6 +561,8 @@ const TodoList = (props) => {
 export default TodoList
 
 ```
+
+---
 
 # Day6. Todo Context API Implementation
 ## 1. Contexts/day6/TodoApp6Context.jsx 
@@ -823,6 +832,7 @@ const TodoListSection6 = (props) => {
 export default TodoListSection6
 
 ```
+---
 
 # Day7. Reduce Method Javascripts & ReactJsx
 
@@ -941,6 +951,7 @@ const ReducerHooks = () => {
 export default ReducerHooks
 
 ```
+---
 
 # Day8. 
 
@@ -991,6 +1002,7 @@ const Todo = () => {
 export default Todo
 
 ```
+---
 
 # Day 9 useEffect Hooks and its use case
 - Syntax
@@ -1261,7 +1273,6 @@ const AsyncAwait = () => {
             setError(err);
             setLoading(false);
         }
-
     }
 
     useEffect(() => {
@@ -1289,3 +1300,8 @@ const AsyncAwait = () => {
 
 export default AsyncAwait
 ```
+## 4. Create React app using Fetch Api, useEffect, Async, Await, Try, Catch, Loading Error
+
+- Project-Api-Pokemon
+
+---

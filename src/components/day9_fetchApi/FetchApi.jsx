@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import PokeApi from './PokeApi'
 import LoadingErrorFetchApi from './LoadingErrorFetchApi'
 import AsyncAwait from './AsyncAwait'
+import Test from './Test'
+import ProjectFetchApi from './ProjectFetchApi'
 
 const FetchApi = () => {
     // const [apiData, setApiData] = useState([])
@@ -22,7 +24,9 @@ const FetchApi = () => {
             })} */}
             {/* <PokeApi/> */}
             {/* <LoadingErrorFetchApi/> */}
-            <AsyncAwait/>
+            {/* <AsyncAwait/> */}
+            {/* <Test/> */}
+            <ProjectFetchApi/>
         </div>
     )
 }
