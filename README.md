@@ -1305,3 +1305,266 @@ export default AsyncAwait
 - Project-Api-Pokemon
 
 ---
+
+# Day 10 Context Api Basic Example & Project 1. Todo App for contextApi
+
+- Wearhouse/ CreateContext
+- Index.jsx
+```jsx
+import { createContext } from "react";
+
+// Step1
+export const BioContext = createContext();
+
+// step2
+export const BioProvider = ({children}) => {
+
+    const name = "Al Muksid"
+
+    return <BioContext.Provider value={name} >
+        {children}
+    </BioContext.Provider>
+}
+```
+
+- App.jsx
+```jsx
+import { BioProvider } from './hooks/day10/Index'
+
+
+<BioProvider>
+  <ContextApi />
+</BioProvider>
+```
+
+home.jsx
+```jsx
+import React, { useContext } from 'react'
+import Contact from './Contact'
+import { BioContext } from '../../../hooks/day10/Index'
+
+
+const Home = () => {
+    const name = useContext(BioContext)
+  return (
+    <div>
+      Hello Context Api. This is {name}
+      <Contact/>
+    </div>
+  )
+}
+
+export default Home
+
+```
+Contact.jsx
+```jsx
+import React from 'react'
+
+const Contact = () => {
+  return (
+    <div>
+        <h2>Contact Us</h2>
+      
+    </div>
+  )
+}
+
+export default Contact
+
+```
+---
+## 1. Todo App for contextApi
+- hooks/day10/todo/AppDay10
+```jsx
+import { createContext, useState } from "react";
+
+export const TodoContext = createContext();
+
+export const TodoProvider = ({ children }) => {
+  const [todoTitle, setTodoTitle] = useState("")
+  const [todoList, setTodoList] = useState([
+    { id: 1, title: 'todo1', isCompleted: false },
+    { id: 2, title: 'todo2', isCompleted: true },
+    { id: 3, title: 'todo3', isCompleted: true },
+  ])
+
+  const [filter, setFilter] = useState("all")
+
+  const filterHandler = (todo) => {
+    if (filter === 'all') return true
+    if (filter === 'active') return !todo.isCompleted
+    if (filter === 'completed') return todo.isCompleted
+  }
+
+  const [search, setSearch] = useState("")
+
+  // const searchHandler = () => todoList.filter((todo) => todo.title.toLowerCase().includes(search.toLowerCase()))
+
+  const [editMode, setEditMode] = useState(false)
+  const [editableTodo, setEditableTodo] = useState(null)
+
+  const updateTodo = () => {
+    const newTodo = todoList.map((todo) => {
+      if (todo.id === editableTodo.id) {
+        return {...todo, title: todoTitle}
+      }
+      return {...todo}
+    })
+    setTodoList(newTodo)
+    setEditMode(false)
+    setEditableTodo(null)
+  }
+
+  return (
+    <TodoContext.Provider value={{updateTodo, editMode, setEditMode, editableTodo, setEditableTodo, search, setSearch, filterHandler, filter, setFilter, todoTitle, setTodoTitle, todoList, setTodoList }}>
+      {children}
+    </TodoContext.Provider>
+  )
+}
+```
+- day10/todo/
+- TodoApp10.jsx
+```jsx
+import React from 'react'
+import { TodoProvider } from '../../../hooks/day10/todo/AppDay10'
+import TodoListSection10 from './TodoListSection10'
+import TodoForm10 from './TodoForm10'
+import TodoSearch10 from './TodoSearch10'
+const TodoApp10 = () => {
+  // console.log(TodoProvider);
+  return (
+    <div style={{textAlign:'center'}}>
+      <TodoProvider>
+        <h2>Todo App</h2>
+        <TodoForm10/>
+        <TodoSearch10/>
+        <TodoListSection10/>
+      </TodoProvider>
+    </div>
+  )
+}
+
+export default TodoApp10
+```
+- TodoForm10.jsx
+```jsx
+import React, { useContext } from 'react'
+import { TodoContext } from '../../../hooks/day10/todo/AppDay10'
+
+const TodoForm10 = () => {
+    const { editMode, updateTodo,  todoTitle, setTodoTitle, todoList, setTodoList } = useContext(TodoContext)
+
+    const submitHandler = (event) => {
+        event.preventDefault()
+        editMode === true ? updateTodo() : createTodo()
+    }
+
+    const createTodo = () => {
+        const newTodo = {
+            id: Date.now() + "",
+            title: todoTitle,
+            isCompleted: false
+        }
+        setTodoList([...todoList, newTodo])
+    }
+    return (
+        <div>
+            <form action="" onSubmit={submitHandler}>
+                <input type="text" name="" id="" value={todoTitle} onChange={(e) => setTodoTitle(e.target.value)} />
+                <button type="submit">{editMode ? 'Update Todo' : 'Create Todo'}</button>
+            </form>
+        </div>
+    )
+}
+
+export default TodoForm10
+```
+- TodoListSection.jsx
+```jsx
+import React from 'react'
+import TodoList10 from './TodoList10'
+import TodoFilter10 from './TodoFilter10'
+
+const TodoListSection10 = () => {
+    return (
+        <div>
+            <TodoFilter10 />
+            <TodoList10 />
+        </div>
+    )
+}
+
+export default TodoListSection10
+```
+- TodoFilter10.jsx
+```jsx
+import React from 'react'
+import { useContext } from 'react'
+import { TodoContext } from '../../../hooks/day10/todo/AppDay10'
+
+const TodoFilter10 = () => {
+    const {setFilter} = useContext(TodoContext)
+
+    return (
+        <div>
+            <button type="submit" onClick={() => setFilter('all')}>All</button>
+            <button type="submit" onClick={() => setFilter('active')}>Active</button>
+            <button type="submit" onClick={() => setFilter('completed')}>Completed</button>
+        </div>
+    )
+}
+
+export default TodoFilter10
+```
+
+- TodoList10.jsx
+```jsx
+import React, { useContext } from 'react'
+import { TodoContext } from '../../../hooks/day10/todo/AppDay10'
+
+const TodoList10 = () => {
+    const {setTodoTitle, setEditableTodo, setEditMode,  search, filterHandler, todoList, setTodoList } = useContext(TodoContext)
+
+    const removeHandler = (todoId) => {
+        const newtodo = todoList.filter((todo) => todo.id !== todoId)
+        setTodoList(newtodo)
+    }
+
+    const checkBoxHandler = (todoId) => {
+        const newTodo = todoList.map((todo) => {
+            if (todo.id === todoId) {
+                return { ...todo, isCompleted: !todo.isCompleted }
+            }
+            return{...todo}
+        })
+        setTodoList(newTodo)
+    }
+
+    const editHandler = (todo) => {
+        setEditMode(true)
+        setEditableTodo(todo)
+        setTodoTitle(todo.title)
+    }
+    
+    return (
+        <div>
+            <ul>
+                {todoList
+                    .filter(filterHandler)
+                    .filter((todo) => todo.title.toLowerCase().includes(search.toLowerCase()))
+                    .map((todo) => <li key={todo.id}>
+                        <input type="checkbox" onChange={() => checkBoxHandler(todo.id)} checked={todo.isCompleted} />
+                        {todo.title}
+                        <button type="submit" onClick={() => removeHandler(todo.id)}>Remove Todo</button>
+                        <button type="submit" onClick={() => editHandler(todo)}>EditTodo</button>
+                    </li>)
+                }
+            </ul>
+        </div>
+    )
+}
+
+export default TodoList10
+
+```
