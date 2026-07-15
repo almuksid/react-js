@@ -1306,7 +1306,7 @@ export default AsyncAwait
 
 ---
 
-# Day 10 Context Api Basic Example & Project 1. Todo App for contextApi
+# Day 10 Context Api Basic Example & Project | createContext, Providor, {children}, value, useContext
 
 - Wearhouse/ CreateContext
 - Index.jsx
@@ -1570,9 +1570,10 @@ export default TodoList10
 ```
 --- 
 
-## 2. Custom Hooks in react.js
+## 2. Custom Hooks in react.js 
 
 ```jsx
+
 export const customBioHook = () => {
     const context = useContext(BioContext);
     return context;
@@ -1625,4 +1626,70 @@ export const customBioHook = () => {
 }
 ```
 
-## 3. 
+## 3. Use React Api | 
+```jsx
+  const {name, age, department} = use(UserContext)
+```
+
+- Use.jsx
+```jsx
+import { createContext, use } from "react";
+
+export const UserContext = createContext()
+
+export const UserProvider = ({ children }) => {
+    const name = "Al Muksid";
+    const age = 35;
+    const department = "Software Engineering";
+
+    return <UserContext.Provider value={{ name, age, department }}>
+        {children}
+    </UserContext.Provider>
+}
+
+export const customUseHooks = () => {
+    const context = use(UserContext);
+    if (!context) {
+        throw new Error("useUser must be used within a UserProvider");
+    }
+    return context
+}
+```
+- UseMain.jsx
+```jsx
+import {UserProvider} from '../../../hooks/day10/useApi/Use'
+import HomeUse from './HomeUse'
+
+const UseMain = () => {
+  return (
+    <div style={{textAlign: 'center', paddingTop: '20px'}}>
+      <h2>Use Api in react</h2>
+      <UserProvider>
+        <HomeUse/>
+      </UserProvider>
+    </div>
+  )
+}
+
+export default UseMain
+
+```
+---HomeUse.jsx
+```jsx
+import { useContext, use } from 'react'
+import { UserContext } from '../../../hooks/day10/useApi/Use'
+import { customUseHooks } from '../../../hooks/day10/useApi/Use'
+
+const HomeUse = () => {
+  // const {name, age, department} = useContext(UserContext)
+  const {name, age, department} = customUseHooks()
+  return (
+    <div>
+        <p>Hi this is {name} {age} years old & {department}</p>
+    </div>
+  )
+}
+
+export default HomeUse
+
+```
