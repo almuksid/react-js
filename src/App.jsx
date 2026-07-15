@@ -18,6 +18,7 @@
 // import ReactTest from './components/day8/ReactTest'
 // import UseEffect from './components/day9/UseEffect'
 import ContextApi from './components/day10/ContextApi'
+import About from './components/day10/contextApi/About'
 import TodoApp10 from './components/day10/todo/TodoApp10'
 import FetchApi from './components/day9_fetchApi/FetchApi'
 import { BioProvider } from './hooks/day10/Index'
@@ -40,12 +41,16 @@ function App() {
         {/* <ReactTest/> */}
         {/* <UseEffect/> */}
         {/* <FetchApi/> */}
-        
+
         {/* <h2>Welcome</h2> */}
-        {/* <BioProvider>
+        <BioProvider>
           <ContextApi />
-        </BioProvider> */}
-        <TodoApp10/>
+          <About />
+        </BioProvider>
+        
+
+        {/* <TodoApp10/> */}
+
       </div>
     </>
   )

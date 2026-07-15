@@ -1,13 +1,11 @@
-import React, { useContext } from 'react'
 import Contact from './Contact'
-import { BioContext } from '../../../hooks/day10/Index'
-
+import { customBioHook } from '../../../hooks/day10/Index'
 
 const Home = () => {
-    const name = useContext(BioContext)
+    const {name, age} = customBioHook()
   return (
     <div>
-      Hello Context Api. This is {name}
+      Hello Context Api. This is {name} I am {age} years old
       <Contact/>
     </div>
   )
