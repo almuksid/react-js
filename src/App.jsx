@@ -24,6 +24,7 @@
 // import { BioProvider } from './hooks/day10/Index'
 
 import UseMain from "./components/day10/useApi/UseMain"
+import UseReducer from "./components/day10/useReducer/UseReducer"
 
 
 function App() {
@@ -49,11 +50,11 @@ function App() {
           <ContextApi />
           <About /> */}
         {/* </BioProvider> */}
-        <UseMain/>
-        
-
+        {/* <UseMain/> */}
         {/* <TodoApp10/> */}
+        <UseReducer />
 
+        
       </div>
     </>
   )
